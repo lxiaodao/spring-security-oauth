@@ -24,9 +24,10 @@ public class CorsFilter implements Filter {
         final HttpServletResponse response = (HttpServletResponse) res;
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+        response.setHeader("Access-Control-Allow-Headers", "Accept,Authorization, Content-Type");
         response.setHeader("Access-Control-Max-Age", "3600");
         if ("OPTIONS".equalsIgnoreCase(((HttpServletRequest) req).getMethod())) {
+        	//响应跨域post请求的判断
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
             chain.doFilter(req, res);

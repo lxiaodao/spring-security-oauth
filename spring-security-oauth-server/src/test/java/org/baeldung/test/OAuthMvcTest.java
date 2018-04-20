@@ -3,6 +3,7 @@ package org.baeldung.test;
 import static org.hamcrest.Matchers.is;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
@@ -60,11 +61,11 @@ public class OAuthMvcTest {
         params.add("password", password);
 
         // @formatter:off
-
+      
         ResultActions result = mockMvc.perform(post("/oauth/token")
                                .params(params)
                                .with(httpBasic(CLIENT_ID, CLIENT_SECRET))
-                               .accept(CONTENT_TYPE))
+                               .accept(CONTENT_TYPE)).andDo(print())
                                .andExpect(status().isOk())
                                .andExpect(content().contentType(CONTENT_TYPE));
         
@@ -78,20 +79,22 @@ public class OAuthMvcTest {
 
     @Test
     public void givenNoToken_whenGetSecureRequest_thenUnauthorized() throws Exception {
-        mockMvc.perform(get("/employee").param("email", EMAIL)).andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/employee").param("email", EMAIL)).andDo(print()).andExpect(status().isUnauthorized());
     }
 
     @Test
     public void givenInvalidRole_whenGetSecureRequest_thenForbidden() throws Exception {
         final String accessToken = obtainAccessToken("user1", "pass");
         System.out.println("token:" + accessToken);
-        mockMvc.perform(get("/employee").header("Authorization", "Bearer " + accessToken).param("email", EMAIL)).andExpect(status().isForbidden());
+        mockMvc.perform(get("/employee").header("Authorization", "Bearer " + accessToken).param("email", EMAIL))
+        .andDo(print())
+        .andExpect(status().isForbidden());
     }
 
     @Test
     public void givenToken_whenPostGetSecureRequest_thenOk() throws Exception {
         final String accessToken = obtainAccessToken("admin", "nimda");
-
+        //String accessToken="69425513-7e44-4203-93a7-52f401209678";
         String employeeString = "{\"email\":\"" + EMAIL + "\",\"name\":\"" + NAME + "\",\"age\":30}";
 
         // @formatter:off
@@ -100,13 +103,13 @@ public class OAuthMvcTest {
                 .header("Authorization", "Bearer " + accessToken)
                 .contentType(CONTENT_TYPE)
                 .content(employeeString)
-                .accept(CONTENT_TYPE))
-                .andExpect(status().isCreated());
+                .accept(CONTENT_TYPE)).andDo(print())
+                .andExpect(status().isOk());
 
         mockMvc.perform(get("/employee")
                 .param("email", EMAIL)
                 .header("Authorization", "Bearer " + accessToken)
-                .accept(CONTENT_TYPE))
+                .accept(CONTENT_TYPE)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(CONTENT_TYPE))
                 .andExpect(jsonPath("$.name", is(NAME)));

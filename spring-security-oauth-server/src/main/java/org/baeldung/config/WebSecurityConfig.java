@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	//TODO: 相关AuthenticationManager的实现要使用数据库的操作方式替换
+	//
     @Autowired
     public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {
         // @formatter:off
@@ -84,6 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/login").permitAll()
 		.antMatchers("/oauth/token/revokeById/**").permitAll()
 		.antMatchers("/tokens/**").permitAll()
+		.antMatchers("/simple/**").permitAll()
 		.anyRequest().authenticated()
 		.and().formLogin().permitAll()
 		.and().csrf().disable();
