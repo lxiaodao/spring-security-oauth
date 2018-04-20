@@ -68,6 +68,16 @@ npm start
 - Note: Angular4 modules are commented out because these don't build on Jenkins as they need npm installed, but they build properly locally
 - Note for Angular version < 4.3.0: You should comment out the HttpClient and HttpClientModule import in app.module and app.service.ts. These version rely on the HttpModule.
 
+## Modify and Question
+- SQL: Modify the script file schema.sql to support MySQL.
+- Add javascript testcase based on jQuery in webapp at 2018-4-20.
+- The OAuthMvcTest runs success.But in `mock.html`,runs the test code as workflow:
+first get access token using http://localhost:7000/spring-security-oauth-server/oauth/token
+second visit http://localhost:7000/spring-security-oauth-server/employee
+The first is success and second is not.
+Maybe,there is some bug in filter of security-OAuthon.
+I do not take any more time to resolve this.
+- Compare this project and [sso-auth](https://github.com/lxiaodao/sso-auth.git).When you want to use custom authenticationManager,I find the configure  is so complex for using spring boot,spring security+OAuthon with database(such as mysql).I do not think it is good to use OAuthon with spring security.
 
 ## Relevant Articles: 
 - [Spring REST API + OAuth2 + AngularJS](http://www.baeldung.com/rest-api-spring-oauth2-angularjs)
